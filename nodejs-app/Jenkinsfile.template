@@ -17,6 +17,6 @@ pipeline {
         sh 'free -g'
         sh 'nproc'
       }
-      }
+    }
   }
 }
