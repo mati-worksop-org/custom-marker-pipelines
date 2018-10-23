@@ -91,18 +91,13 @@ pipeline {
       }
       steps {
         checkout scm
-            stage('Nodejs Setup') {
-              steps {
-                checkout scm
-                defineProps('.nodejs-app', [npmPackages: 'express pug'])            
-                container('nodejs') {
-                  sh """
-                    npm i -S ${npmPackages}
-                    node ./hello.js &
-                  """
-                }
-              }   
-            }    
+                script {
+                  //define default values that may be overridden via the .nodejs-app file
+                  def d = [npmPackages: 'express pug']
+                  //use the Pipeline Utility Steps plugin readProperties step to read the .nodejs-app custom marker file 
+                  def props = defineProps defaults: d, file: '.nodejs-app'
+                  env.npmPackages = props['npmPackages']
+                }     
                 container('nodejs') {
                   sh """
                     npm i -S ${npmPackages}
