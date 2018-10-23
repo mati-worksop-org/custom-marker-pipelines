@@ -26,10 +26,11 @@ pipeline {
               steps {
                 checkout scm
                 container('nodejs') {
-                  sh """
-                    npm i -S ${npmPackages}
+                  sh '''
+                    npm install express
+                    npm install pug --save
                     node ./hello.js &
-                  """
+                  '''
                 }
               }   
             }
@@ -91,17 +92,18 @@ pipeline {
       steps {
         checkout scm
                 script {
+                  //define default values that may be overridden via the .nodejs-app file
+                  def d = [npmPackages: 'express pug']
                   //use the Pipeline Utility Steps plugin readProperties step to read the .nodejs-app custom marker file 
-                  def props = readProperties file: '.nodejs-app'
+                  def props = readProperties defaults: d, file: '.nodejs-app'
                   env.npmPackages = props['npmPackages']
-                }        
-        container('nodejs') {
-          sh '''
-            npm install express
-            npm install pug --save
-            node ./hello.js &
-          '''
-        }
+                }     
+                container('nodejs') {
+                  sh """
+                    npm i -S ${npmPackages}
+                    node ./hello.js &
+                  """
+                } 
         container('apache-benchmark') {
           sh 'ab -n 10 -c 4 -s 5 http://localhost:8080/'
         }
