@@ -1,3 +1,4 @@
+library 'cd-accel'
 pipeline {
   agent none
   options { 
