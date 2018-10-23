@@ -31,7 +31,17 @@ pipeline {
         container('testcafe') {
           sh '/opt/testcafe/docker/testcafe-docker.sh "chromium --no-sandbox" tests/*.js -r xunit:res.xml'
         }
-            stage('Load Test') {  
+      }
+      post {
+        success {
+          stash name: 'app', includes: '*.js, public/**, views/*, Dockerfile'
+        }
+        always {
+          junit 'res.xml'
+        }
+      }   
+    }
+    stage('Load Test') {  
       agent {
         kubernetes {
           label 'nodejs-ab'
@@ -51,16 +61,6 @@ pipeline {
           sh 'ab -n 10 -c 4 -s 5 http://localhost:8080/'
         }
       }
-    }
-      }
-      post {
-        success {
-          stash name: 'app', includes: '*.js, public/**, views/*, Dockerfile'
-        }
-        always {
-          junit 'res.xml'
-        }
-      }   
     }
     stage('Build and Push Image') {
       agent any
