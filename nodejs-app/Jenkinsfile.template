@@ -6,15 +6,17 @@ pipeline {
   stages {
     stage('Say Hello') {
       steps {
-       container('nodejs') {
         echo 'Hello World!'   
         sh 'java -version'
+      }
+    }
+    stage('run stats') {
+      steps { 
         sh 'df -hP /'
         sh 'uname -a'
         sh 'free -g'
         sh 'nproc'
-        }
       }
-    }
+      }
   }
 }
