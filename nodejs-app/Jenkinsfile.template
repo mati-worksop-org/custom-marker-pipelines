@@ -1,24 +1,16 @@
 pipeline {
   agent none
   options { 
-    buildDiscarder(logRotator(numToKeepStr: '5'))
+    buildDiscarder(logRotator(numToKeepStr: '2'))
   }
   stages {
-    stage('TEST') {
+    stage('Test') {
       agent { label 'nodejs-app' }
       steps {
-      container('nodejs') {
-        echo 'Hello World!'   
-        sh 'node --version'
+        container('nodejs') {
+          echo 'Hello World!'   
+          sh 'node --version'
         }
-      }
-    }
-    stage('run stats') {
-      steps { 
-        sh 'df -hP /'
-        sh 'uname -a'
-        sh 'free -g'
-        sh 'nproc'
       }
     }
     stage('Build and Push Image') {
@@ -29,6 +21,6 @@ pipeline {
       steps {
          echo "TODO - build and push image"
       }
-    }    
+    }
   }
 }
