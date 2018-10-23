@@ -11,6 +11,7 @@ pipeline {
   stages {
     stage('Test') {
       agent { label 'nodejs-app' }
+      checkout scm
       steps {
         container('nodejs') {
           echo 'Hello World!'   
