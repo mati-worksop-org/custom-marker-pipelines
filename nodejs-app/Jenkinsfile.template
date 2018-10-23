@@ -62,7 +62,6 @@ spec:
         }
       }
     }
-    }
     stage('Deploy') {
       when {
         beforeAgent true
