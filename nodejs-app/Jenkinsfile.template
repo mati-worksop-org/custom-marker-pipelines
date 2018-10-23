@@ -26,11 +26,10 @@ pipeline {
               steps {
                 checkout scm
                 container('nodejs') {
-                  sh '''
-                    npm install express
-                    npm install pug --save
+                  sh """
+                    npm i -S ${npmPackages}
                     node ./hello.js &
-                  '''
+                  """
                 }
               }   
             }
