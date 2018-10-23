@@ -54,8 +54,6 @@ spec:
         echo "TODO - build and push image"
         unstash 'app'
       }
-    }
-    }
       post {
         success {
           slackSend "${JOB_NAME} pipeline job is awaiting approval at: ${RUN_DISPLAY_URL}"
@@ -78,5 +76,5 @@ spec:
         echo "Continuing with deployment - approved by ${APPROVER}"
       }
     }
+  }
 }
-
