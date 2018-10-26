@@ -116,8 +116,9 @@ pipeline {
         branch 'master'
       }
       steps {
-        echo "TODO - build and push image"
-        unstash 'app'
+        dockerBuildPush(env.IMAGE_NAME, env.IMAGE_TAG) {
+          unstash 'app'
+        }
       }
       post {
         success {
@@ -138,7 +139,7 @@ pipeline {
         submitterParameter "APPROVER"
       }
       steps {
-        echo "Continuing with deployment - approved by ${APPROVER}"
+        kubeDeploy(env.IMAGE_NAME, env.IMAGE_TAG)
       }
     }
   }
