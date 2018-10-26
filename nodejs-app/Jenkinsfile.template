@@ -117,7 +117,7 @@ pipeline {
       }
       steps {
         dockerBuildPush(env.IMAGE_NAME, env.IMAGE_TAG) {
-          unstash 'app'
+          stash 'app'
         }
       }
       post {
